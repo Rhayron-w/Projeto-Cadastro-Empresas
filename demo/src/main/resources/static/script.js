@@ -16,15 +16,11 @@ $('#mt').onclick=()=>{const o=$('#nav').classList.toggle('o');$('#mt').setAttrib
 // Abas
 $$('.tb').forEach(b=>b.onclick=()=>{$$('.tb').forEach(x=>x.setAttribute('aria-selected','false'));b.setAttribute('aria-selected','true');$$('.tp').forEach((p,i)=>p.classList.toggle('on',i==b.dataset.t))});
 
-// ==========================================
-// INTEGRAÇÃO COM O BACKEND SPRING BOOT
-// ==========================================
 
-// Cadastro de Usuário
 $('#cf').onsubmit = async e => {
     e.preventDefault();
     
-    // Pega os valores dos inputs do formulário de cadastro (ajuste os seletores se necessário)
+
     const emailInput = $('#cf input[type="email"]') || $('#cf input[name="email"]');
     const senhaInput = $('#cf input[type="password"]') || $('#cf input[name="senha"]');
     
@@ -56,7 +52,6 @@ $('#cf').onsubmit = async e => {
     }
 };
 
-// Login de Usuário
 $('#lf').onsubmit = async e => {
     e.preventDefault();
 
@@ -88,12 +83,11 @@ $('#lf').onsubmit = async e => {
     }
 };
 
-// Chat: a IA sera integrada por outro grupo.
 const bot=$('#ms').querySelector('img').src;
 window.evaResponder=t=>{const m=document.createElement('div');m.className='m';m.innerHTML='<img alt="EVA"><span></span>';m.firstChild.src=bot;m.lastChild.textContent=t;$('#ms').append(m);m.scrollIntoView({block:'end'})};
 $('#chf').onsubmit=e=>{e.preventDefault();const i=$('#ci'),t=i.value.trim();if(!t)return;
 const u=document.createElement('div');u.className='m u';u.innerHTML='<span></span>';u.firstChild.textContent=t;$('#ms').append(u);i.value='';
 dispatchEvent(new CustomEvent('eva:enviar',{detail:t}))};
-// Aviso de suporte
+
 try{if(sessionStorage.getItem('av')!='1')setTimeout(()=>$('#av').classList.add('on'),1500)}catch(e){setTimeout(()=>$('#av').classList.add('on'),1500)}
 $('#avx').onclick=()=>{$('#av').classList.remove('on');try{sessionStorage.setItem('av','1')}catch(e){}};
