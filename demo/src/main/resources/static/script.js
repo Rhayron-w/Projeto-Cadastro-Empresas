@@ -105,6 +105,52 @@ window.evaResponder=t=>{const m=document.createElement('div');m.className='m';m.
 $('#chf').onsubmit=e=>{e.preventDefault();const i=$('#ci'),t=i.value.trim();if(!t)return;
 const u=document.createElement('div');u.className='m u';u.innerHTML='<span></span>';u.firstChild.textContent=t;$('#ms').append(u);i.value='';
 dispatchEvent(new CustomEvent('eva:enviar',{detail:t}))};
+// EVA: conversa com a IA em Python (o Spring faz a ponte)
+// Cada aba recebe um id de sessão; o Python usa esse id para lembrar a conversa.
+const sessaoEva = (() => {
+    try {
+        let id = sessionStorage.getItem('eva_sid');
+        if (!id) {
+            id = crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2);
+            sessionStorage.setItem('eva_sid', id);
+        }
+        return id;
+    } catch (e) {
+        return 'anon-' + Math.random().toString(36).slice(2);
+    }
+})();
+
+// Saudação real da EVA e botões de atalho (se o Python estiver no ar)
+fetch('/api/eva/greeting')
+    .then(r => r.ok ? r.json() : null)
+    .then(g => {
+        if (!g) return;
+        if (g.mensagem) $('#ms').querySelector('.m span').textContent = g.mensagem;
+        (g.atalhos || []).forEach(texto => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = texto;
+            b.onclick = () => { $('#ci').value = texto; $('#chf').requestSubmit(); };
+            $('#chips').append(b);
+        });
+    })
+    .catch(() => {});
+
+addEventListener('eva:enviar', async e => {
+    evaResponder('Digitando...');
+    const balao = $('#ms').lastElementChild.lastChild; // <span> do balão da EVA
+    try {
+        const r = await fetch('/api/eva/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mensagem: e.detail, sessionId: sessaoEva })
+        });
+        balao.textContent = r.ok ? await r.text() : 'Desculpe, não consegui responder agora.';
+    } catch (erro) {
+        balao.textContent = 'Erro de conexão com o servidor.';
+    }
+});
+
 // Aviso de suporte
 try{if(sessionStorage.getItem('av')!='1')setTimeout(()=>$('#av').classList.add('on'),1500)}catch(e){setTimeout(()=>$('#av').classList.add('on'),1500)}
 $('#avx').onclick=()=>{$('#av').classList.remove('on');try{sessionStorage.setItem('av','1')}catch(e){}};
