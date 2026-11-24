@@ -16,17 +16,36 @@ $('#mt').onclick=()=>{const o=$('#nav').classList.toggle('o');$('#mt').setAttrib
 // Abas
 $$('.tb').forEach(b=>b.onclick=()=>{$$('.tb').forEach(x=>x.setAttribute('aria-selected','false'));b.setAttribute('aria-selected','true');$$('.tp').forEach((p,i)=>p.classList.toggle('on',i==b.dataset.t))});
 
+// ==========================================
+// INTEGRAÇÃO COM O BACKEND SPRING BOOT
+// ==========================================
+
+// Cadastro de Usuário
+const mostrarMsgCadastro = (texto, cor) => {
+    $('#cm').textContent = texto;
+    $('#cm').style.color = cor;
+};
 
 $('#cf').onsubmit = async e => {
     e.preventDefault();
-    
+    const f = e.target;
+    const campo = nome => f.elements[nome].value.trim();
 
-    const emailInput = $('#cf input[type="email"]') || $('#cf input[name="email"]');
-    const senhaInput = $('#cf input[type="password"]') || $('#cf input[name="senha"]');
-    
+    if (f.elements.senha.value !== f.elements.confirmar.value) {
+        mostrarMsgCadastro('As senhas não coincidem.', 'red');
+        return;
+    }
+
     const dados = {
-        email: emailInput ? emailInput.value : '',
-        senha: senhaInput ? senhaInput.value : ''
+        nome: campo('nome'),
+        sobrenome: campo('sobrenome'),
+        pais: campo('pais'),
+        telefone: campo('telefone'),
+        email: campo('email'),
+        empresa: campo('empresa'),
+        departamento: campo('departamento'),
+        relacionamento: campo('relacionamento'),
+        senha: f.elements.senha.value
     };
 
     try {
@@ -39,28 +58,24 @@ $('#cf').onsubmit = async e => {
         const mensagem = await resposta.text();
 
         if (resposta.ok) {
-            $('#cm').textContent = 'Cadastro realizado com sucesso! Pode fazer login.';
-            $('#cm').style.color = 'green';
+            mostrarMsgCadastro('Cadastro realizado com sucesso! Pode fazer login.', 'green');
+            f.reset();
             setTimeout(() => { location.hash = '#login'; }, 2000);
         } else {
-            $('#cm').textContent = mensagem || 'Erro ao cadastrar.';
-            $('#cm').style.color = 'red';
+            mostrarMsgCadastro(mensagem || 'Erro ao cadastrar.', 'red');
         }
     } catch (erro) {
-        $('#cm').textContent = 'Erro de conexão com o servidor Java.';
-        $('#cm').style.color = 'red';
+        mostrarMsgCadastro('Erro de conexão com o servidor Java.', 'red');
     }
 };
 
+// Login de Usuário
 $('#lf').onsubmit = async e => {
     e.preventDefault();
 
-    const emailInput = $('#lf input[type="email"]') || $('#lf input[name="email"]');
-    const senhaInput = $('#lf input[type="password"]') || $('#lf input[name="senha"]');
-
     const dados = {
-        email: emailInput ? emailInput.value : '',
-        senha: senhaInput ? senhaInput.value : ''
+        email: $('#em').value.trim(),
+        senha: $('#ls').value
     };
 
     try {
@@ -73,21 +88,23 @@ $('#lf').onsubmit = async e => {
         const mensagem = await resposta.text();
 
         if (resposta.ok) {
+            $('#ls').value = '';
             alert('Login efetuado com sucesso!');
             location.hash = '#home'; // Redireciona para a home após logar
         } else {
-            alert(mensagem || 'Email ou senha incorretos!');
+            alert(mensagem || 'E-mail ou senha incorretos!');
         }
     } catch (erro) {
         alert('Erro de conexão com o servidor Java.');
     }
 };
 
+// Chat: a IA sera integrada por outro grupo.
 const bot=$('#ms').querySelector('img').src;
 window.evaResponder=t=>{const m=document.createElement('div');m.className='m';m.innerHTML='<img alt="EVA"><span></span>';m.firstChild.src=bot;m.lastChild.textContent=t;$('#ms').append(m);m.scrollIntoView({block:'end'})};
 $('#chf').onsubmit=e=>{e.preventDefault();const i=$('#ci'),t=i.value.trim();if(!t)return;
 const u=document.createElement('div');u.className='m u';u.innerHTML='<span></span>';u.firstChild.textContent=t;$('#ms').append(u);i.value='';
 dispatchEvent(new CustomEvent('eva:enviar',{detail:t}))};
-
+// Aviso de suporte
 try{if(sessionStorage.getItem('av')!='1')setTimeout(()=>$('#av').classList.add('on'),1500)}catch(e){setTimeout(()=>$('#av').classList.add('on'),1500)}
 $('#avx').onclick=()=>{$('#av').classList.remove('on');try{sessionStorage.setItem('av','1')}catch(e){}};

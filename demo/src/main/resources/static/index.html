@@ -65,8 +65,10 @@
                 </div>
             </div>
 
+            <!-- HOME -->
             <section class="view" id="v-home">
 
+                <!-- NOSSA HISTÓRIA (logo após as informações sobre a empresa) -->
                 <div class="story sec">
                     <div class="w" style="width:min(900px,100% - 40px)">
                         <h2 class="s">Nossa história</h2>
@@ -279,6 +281,7 @@
                 </div>
             </section>
 
+            <!-- LOGIN -->
             <section class="view" id="v-login">
                 <div class="modal">
                     <div class="lc">
@@ -288,6 +291,9 @@
                             <form id="lf">
                                 <label for="em">E-mail corporativo *</label>
                                 <input id="em" type="email" required autocomplete="email">
+
+                                <label for="ls" style="margin-top:18px">Senha *</label>
+                                <input id="ls" type="password" required autocomplete="current-password">
 
                                 <div style="text-align:center;margin-top:22px">
                                     <button class="btn b3" type="submit">CONTINUAR</button>
@@ -312,6 +318,7 @@
                 </div>
             </section>
 
+            <!-- CADASTRO -->
             <section class="view" id="v-cadastro">
                 <div class="modal">
                     <div class="lc" style="border-radius:12px;width:min(780px,100% - 32px)">
@@ -324,20 +331,20 @@
                         <form class="fm" id="cf">
                             <h2>Um novo membro da Integra</h2>
 
-                            <input placeholder="Nome *" required aria-label="Nome">
-                            <input placeholder="Sobrenome" aria-label="Sobrenome">
+                            <input name="nome" placeholder="Nome *" required aria-label="Nome">
+                            <input name="sobrenome" placeholder="Sobrenome" aria-label="Sobrenome">
 
-                            <select aria-label="País/Região">
-                                <option>País/Região</option>
+                            <select name="pais" aria-label="País/Região">
+                                <option value="">País/Região</option>
                                 <option>Brasil</option>
                                 <option>Outro</option>
                             </select>
 
-                            <input type="tel" placeholder="Telefone" aria-label="Telefone">
-                            <input type="email" placeholder="E-mail corporativo *" required aria-label="E-mail corporativo">
-                            <input placeholder="Empresa" aria-label="Empresa">
+                            <input name="telefone" type="tel" placeholder="Telefone" aria-label="Telefone">
+                            <input name="email" type="email" placeholder="E-mail corporativo *" required aria-label="E-mail corporativo" autocomplete="email">
+                            <input name="empresa" placeholder="Empresa" aria-label="Empresa">
 
-                            <select required aria-label="Departamento">
+                            <select name="departamento" required aria-label="Departamento">
                                 <option value="">Departamento *</option>
                                 <option>Financeiro</option>
                                 <option>Operações</option>
@@ -345,12 +352,15 @@
                                 <option>Comercial</option>
                             </select>
 
-                            <select aria-label="Relacionamento com a Integra">
-                                <option>Relacionamento com a Integra</option>
+                            <select name="relacionamento" aria-label="Relacionamento com a Integra">
+                                <option value="">Relacionamento com a Integra</option>
                                 <option>Cliente</option>
                                 <option>Parceiro</option>
                                 <option>Outro</option>
                             </select>
+
+                            <input name="senha" type="password" placeholder="Senha * (mín. 6 caracteres)" required minlength="6" autocomplete="new-password" aria-label="Senha">
+                            <input name="confirmar" type="password" placeholder="Confirmar senha *" required minlength="6" autocomplete="new-password" aria-label="Confirmar senha">
 
                             <p class="full">A INTEGRA usará os dados fornecidos de acordo com a <a href="#cadastro" style="color:var(--blue)">DECLARAÇÃO DE PRIVACIDADE</a></p>
 
@@ -377,6 +387,7 @@
                 </div>
             </section>
 
+            <!-- EVA CHAT -->
             <section class="view" id="v-eva">
                 <div class="eh">
                     <div class="w">
